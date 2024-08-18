@@ -1,0 +1,151 @@
+<html>
+<head>
+	<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Modern Webpage with Menu</title>
+	<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+        color: #333;
+    }
+    header {
+        background-color: #2c3e50;
+        padding: 1rem;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+    }
+    nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #ecf0f1;
+    }
+    .menu-toggle {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+    }
+    .bar {
+        width: 25px;
+        height: 3px;
+        background-color: #ecf0f1;
+        margin: 3px 0;
+        transition: 0.4s;
+    }
+    .menu {
+        display: flex;
+        list-style-type: none;
+    }
+    .menu li {
+        margin-left: 1.5rem;
+    }
+    .menu a {
+        color: #ecf0f1;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    .menu a:hover {
+        color: #3498db;
+    }
+    main {
+        margin-top: 5rem;
+        padding: 2rem;
+    }
+    .hero {
+        background-color: #3498db;
+        color: #fff;
+        text-align: center;
+        padding: 4rem 2rem;
+        border-radius: 10px;
+    }
+    .hero h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+    .hero p {
+        font-size: 1.2rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    @media (max-width: 768px) {
+        .menu-toggle {
+            display: flex;
+        }
+        .menu {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: #2c3e50;
+            padding: 1rem;
+        }
+        .menu.active {
+            display: flex;
+        }
+        .menu li {
+            margin: 0.5rem 0;
+        }
+    }
+</style></head><body>
+    <header>
+        <nav>
+            <div class="logo">ModernWeb</div>
+            <div class="menu-toggle">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+            <ul class="menu">
+                <li><a href="https://example.com/home">Home</a></li>
+                <li><a href="https://example.com/about">About</a></li>
+                <li><a href="https://example.com/services">Services</a></li>
+                <li><a href="https://example.com/contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="hero">
+            <h1>Welcome to ModernWeb</h1>
+            <p>Experience the future of web design with our cutting-edge modern webpage.</p>
+        </section>
+    </main>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const menuToggle = document.querySelector('.menu-toggle');
+        const menu = document.querySelector('.menu');
+        const bars = document.querySelectorAll('.bar');
+
+        menuToggle.addEventListener('click', () => {
+            menu.classList.toggle('active');
+            bars.forEach(bar => bar.classList.toggle('active'));
+        });
+
+        // GSAP animation for hero section
+        gsap.from('.hero', {
+            duration: 1,
+            y: 50,
+            opacity: 0,
+            ease: 'power3.out'
+        });
+
+        // GSAP animation for menu items
+        gsap.from('.menu li', {
+            duration: 0.5,
+            opacity: 0,
+            y: -20,
+            stagger: 0.1,
+            ease: 'power2.out'
+        });
+    });
+    </script>
+</body></html>
