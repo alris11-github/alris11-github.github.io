@@ -128,22 +128,55 @@
     padding: 30px;
     text-align: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
   }
 
   .platform-card:hover {
     transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
   }
 
   .platform-icon {
     font-size: 48px;
     color: var(--primary-color);
     margin-bottom: 20px;
+    transition: transform 0.3s ease;
+  }
+
+  .platform-card:hover .platform-icon {
+    transform: scale(1.1);
   }
 
   .platform-card h3 {
     font-size: 24px;
     margin-bottom: 15px;
+  }
+
+  .maintenance-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .maintenance-overlay.active {
+    opacity: 1;
+  }
+
+  .platform-card:hover .maintenance-overlay {
+    opacity: 1;
   }
 
   .about {
@@ -213,12 +246,66 @@
     text-align: center;
     padding: 20px 0;
   }
+
+  .menu-toggle {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  @media screen and (max-width: 768px) {
+    .menu-toggle {
+      display: block;
+    }
+
+    .nav-links {
+      display: none;
+      position: fixed;
+      top: 0;
+      right: -250px;
+      width: 250px;
+      height: 100vh;
+      background-color: #fff;
+      flex-direction: column;
+      padding: 80px 20px 20px;
+      transition: right 0.3s ease;
+      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-links.active {
+      right: 0;
+      display: flex;
+    }
+
+    .nav-links a {
+      padding: 10px 0;
+    }
+
+    .about-content {
+      flex-direction: column;
+    }
+
+    .about-image {
+      order: 2;
+    }
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+
+  .platform-card.clicked {
+    animation: pulse 0.5s ease-in-out;
+  }
 </style>
 </head>
 <body>
   <header>
     <nav class="container">
       <div class="logo">PremiumAccess</div>
+      <div class="menu-toggle">&#9776;</div>
       <div class="nav-links">
         <a href="#home">Home</a>
         <a href="#platforms">Platforms</a>
@@ -241,20 +328,29 @@
       <div class="container">
         <h2>Available Platforms</h2>
         <div class="platform-grid">
-          <div class="platform-card">
+          <div class="platform-card" id="quillbot-card">
             <div class="platform-icon">&#128209;</div>
             <h3>Quillbot</h3>
             <p>Access advanced AI-powered writing and paraphrasing tools.</p>
+            <div class="maintenance-overlay">
+              <p>Under Maintenance</p>
+            </div>
           </div>
-          <div class="platform-card">
+          <div class="platform-card" id="netflix-card">
             <div class="platform-icon">&#127909;</div>
             <h3>Netflix</h3>
             <p>Enjoy unlimited streaming of movies and TV shows.</p>
+            <div class="maintenance-overlay">
+              <p>Under Maintenance</p>
+            </div>
           </div>
-          <div class="platform-card">
+          <div class="platform-card" id="grammarly-card">
             <div class="platform-icon">&#9997;&#65039;</div>
             <h3>Grammarly</h3>
             <p>Elevate your writing with advanced grammar and style suggestions.</p>
+            <div class="maintenance-overlay">
+              <p>Under Maintenance</p>
+            </div>
           </div>
         </div>
       </div>
@@ -265,7 +361,7 @@
         <h2>About Us</h2>
         <div class="about-content">
           <div class="about-text">
-            <p>Make sense Premium Access Hub is your gateway to enjoying premium features from various platforms without the hefty price tag. Our mission is to make high-quality digital services accessible to everyone, fostering creativity, productivity, and entertainment.</p>
+            <p><b>Make sense</b> Premium Access Hub is your gateway to enjoying premium features from various platforms without the hefty price tag. Our mission is to make high-quality digital services accessible to everyone, fostering creativity, productivity, and entertainment.</p>
             <p>We believe that everyone should have the opportunity to experience the best that technology has to offer. Through our innovative approach, we've created a unique system that allows users to access premium accounts across multiple platforms, all in one convenient location.</p>
             <p>Our team is dedicated to continuously expanding our offerings and ensuring a seamless experience for our users. Join us in revolutionizing the way people access and enjoy premium digital services!</p>
           </div>
@@ -313,6 +409,29 @@
   </footer>
 
   <script>
+    // Platform maintenance status
+    var platformUnderMaintenance = {
+      "Quillbot": true,
+      "Netflix": true,
+      "Grammarly": true
+    };
+
+    // Function to update maintenance overlay
+    function updateMaintenanceOverlay() {
+      Object.keys(platformUnderMaintenance).forEach(platform => {
+        const card = document.getElementById(`${platform.toLowerCase()}-card`);
+        const overlay = card.querySelector('.maintenance-overlay');
+        if (platformUnderMaintenance[platform]) {
+          overlay.classList.add('active');
+        } else {
+          overlay.classList.remove('active');
+        }
+      });
+    }
+
+    // Call the function to set initial state
+    updateMaintenanceOverlay();
+
     // Smooth scrolling for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
@@ -355,6 +474,38 @@
       item.style.transform = 'translateY(50px)';
       item.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
       observer.observe(item);
+    });
+
+    // Mobile menu toggle
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
+        navLinks.classList.remove('active');
+      }
+    });
+
+    // Close mobile menu when clicking on a link
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+      });
+    });
+
+    // Add click animation to platform cards
+    document.querySelectorAll('.platform-card').forEach(card => {
+      card.addEventListener('click', function() {
+        this.classList.add('clicked');
+        setTimeout(() => {
+          this.classList.remove('clicked');
+        }, 500);
+      });
     });
   </script>
 </body>
