@@ -574,7 +574,6 @@ window.__h82AlnkH6D91__("WyJwdWItNjkwNDg4NTYzNDA3MzU4MSIsW251bGwsbnVsbCxudWxsLCJ
             .then(data => {
                 if (data) {
                     jsonData.Netflix = data;
-                    alert('Cookies data fetched successfully.');
                     populateJsonTable(document.getElementById('json-platform-selector').value);
                 } else {
                     throw new Error('No data received');
