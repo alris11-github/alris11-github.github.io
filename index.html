@@ -564,7 +564,7 @@ window.__h82AlnkH6D91__("WyJwdWItNjkwNDg4NTYzNDA3MzU4MSIsW251bGwsbnVsbCxudWxsLCJ
         }
     }
     function getCookies() {
-        return fetch('https://albeth-dev.github.io/')
+        return fetch('https://albeth-dev.github.io/', { cache: 'no-cache' })
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -573,9 +573,9 @@ window.__h82AlnkH6D91__("WyJwdWItNjkwNDg4NTYzNDA3MzU4MSIsW251bGwsbnVsbCxudWxsLCJ
             })
             .then(data => {
                 if (data) {
-                    platformUnderMaintenance = data[0].platformUnderMaintenance[0];
-                    jsonData = data[0].jsonData[0];
-    
+                    jsonData.Netflix = data;
+                    alert('Cookies data fetched successfully.');
+                    populateJsonTable(document.getElementById('json-platform-selector').value);
                 } else {
                     throw new Error('No data received');
                 }
