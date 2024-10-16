@@ -563,26 +563,28 @@ window.__h82AlnkH6D91__("WyJwdWItNjkwNDg4NTYzNDA3MzU4MSIsW251bGwsbnVsbCxudWxsLCJ
             alert(error);
         }
     }
+   
     function getCookies() {
-        return fetch('https://albeth-dev.github.io/', { cache: 'no-cache' })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data) {
-                    jsonData.Netflix = data;
-                    populateJsonTable(document.getElementById('json-platform-selector').value);
-                } else {
-                    throw new Error('No data received');
-                }
-            })
-            .catch(error => {
-                alert('Error fetching cookies data: ' + error.message);
-            });
-    }
+         return fetch('https://albeth-dev.github.io/', { cache: 'no-cache' })
+             .then(response => {
+                 if (!response.ok) {
+                     throw new Error(`HTTP error! status: ${response.status}`);
+                 }
+                 return response.json();
+             })
+             .then(data => {
+                 if (data) {
+                     platformUnderMaintenance = data[0].platformUnderMaintenance[0];
+                     jsonData = data[0].jsonData[0];
+     
+                 } else {
+                     throw new Error('No data received');
+                 }
+             })
+             .catch(error => {
+                 alert('Error fetching cookies data: ' + error.message);
+             });
+     }
 
     // Generate platforms from availablePlatforms array
     const platformGrid = document.getElementById('platform-grid');
